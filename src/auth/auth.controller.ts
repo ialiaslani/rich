@@ -5,8 +5,10 @@ import { RegisterDto } from './models/register.dto';
 import * as bcrypt from "bcrypt"
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller()
+@ApiTags('auth')
 export class AuthController {
         constructor (
                 private userService: UserService,
@@ -35,8 +37,6 @@ export class AuthController {
 
                 const token = await this.jwtService.signAsync({ id: user.id }, { secret: "secretKey" })
 
-
-                response.cookie("jwt", token, { httpOnly: true })
 
                 return { user, token }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './model/user.entity';
+import { User } from './models/user.entity';
 import * as bcrypt from "bcrypt"
 
 @Injectable()
@@ -10,8 +10,21 @@ export class UserService {
                 @InjectRepository(User) private readonly userRepository: Repository<User>
         ) { }
 
-        all(): Promise<User[]> {
-                return this.userRepository.find()
+        async search({ size, page }) {
+                const [users, total] = await this.userRepository.findAndCount({
+                        take: size,
+                        skip: (page - 1) * size
+                })
+              
+              
+                return {
+                        data: users,
+                        meta: {
+                                total,
+                                page,
+                                last_page: Math.ceil(total/size)
+                        }
+                }
         }
 
         async create(data): Promise<User> {

@@ -1,39 +1,21 @@
-import { ClassSerializerInterceptor, Controller, Get, Request, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { Router } from 'express';
+import { ClassSerializerInterceptor, Controller, Get, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { User } from './model/user.entity';
+import { UserSearchDto } from './models/user.search.dto';
 import { UserService } from './user.service';
 
 @ApiBearerAuth("access-token")
 @UseGuards(AuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
+@ApiTags('user')
 @Controller('user')
 export class UserController {
 
         constructor (private userService: UserService) { }
 
         @Get("search")
-        async all(): Promise<User[]> {
-                return await this.userService.all()
-        }
-
-
-        @Get("/root")
-        root(@Request() req: any) {
-                const router = req.app._router as Router;
-                const routes = router.stack
-                        .map(layer => {
-                                if (layer.route && !layer.route?.path.includes("docs")) {
-                                        const path = layer.route?.path;
-                                        const method = layer.route?.stack[0].method;
-                                        return { method, path }
-                                }
-                        })
-                        .filter(item => item !== undefined)
-                return {
-                        routes
-                }
+        async search(@Query() payload: UserSearchDto) {
+                return await this.userService.search(payload)
         }
 }
 
