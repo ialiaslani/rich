@@ -1,8 +1,13 @@
-import { Controller, Get, Request } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Request, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { Router } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from './model/user.entity';
 import { UserService } from './user.service';
 
+@ApiBearerAuth("access-token")
+@UseGuards(AuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
 

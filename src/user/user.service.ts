@@ -16,6 +16,10 @@ export class UserService {
 
         async create(data): Promise<User> {
                 const hash = await bcrypt.hash(data.password, 12)
-                return this.userRepository.save({...data, password: hash})
+                return this.userRepository.save({ ...data, password: hash })
+        }
+
+        async findOne(where): Promise<User> {
+                return this.userRepository.findOne({ where })
         }
 }

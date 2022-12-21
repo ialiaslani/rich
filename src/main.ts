@@ -9,6 +9,10 @@ async function bootstrap() {
   app.setGlobalPrefix("api/rich/web")
   const config = new DocumentBuilder()
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token'
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
