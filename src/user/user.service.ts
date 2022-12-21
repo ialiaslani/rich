@@ -15,14 +15,14 @@ export class UserService {
                         take: size,
                         skip: (page - 1) * size
                 })
-              
-              
+
+
                 return {
                         data: users,
                         meta: {
                                 total,
                                 page,
-                                last_page: Math.ceil(total/size)
+                                last_page: Math.ceil(total / size)
                         }
                 }
         }
@@ -34,5 +34,11 @@ export class UserService {
 
         async findOne(where): Promise<User> {
                 return this.userRepository.findOne({ where })
+        }
+
+        async saveAvatar(id, image = ""): Promise<any> {
+                return this.userRepository.update(id, {
+                        image
+                })
         }
 }

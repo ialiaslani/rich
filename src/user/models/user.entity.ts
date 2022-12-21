@@ -1,10 +1,10 @@
 import { Exclude } from "class-transformer";
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { CommonEntity } from "src/common/models/common.entity";
+import { Role } from "src/role/models/role.entity";
+import { Entity, Column, ManyToMany, JoinTable } from "typeorm"
 
 @Entity("users")
-export class User {
-        @PrimaryGeneratedColumn()
-        id: number;
+export class User extends CommonEntity {
 
         @Column()
         name: string;
@@ -12,7 +12,19 @@ export class User {
         @Column()
         email: string;
 
+        @Column({ nullable: true })
+        image: string;
+
         @Column()
         @Exclude()
         password: string;
+
+
+        @ManyToMany(() => Role, { cascade: true })
+        @JoinTable({
+                name: "users_roles",
+                joinColumn: { name: "role_id", referencedColumnName: "id" },
+                inverseJoinColumn: { name: "user_id", referencedColumnName: "id" }
+        })
+        roles: Role[]
 }
