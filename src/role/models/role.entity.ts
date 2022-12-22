@@ -12,9 +12,9 @@ export class Role extends CommonEntity {
         @ManyToMany(() => Permission, { cascade: true })
         @JoinTable({
                 name: "roles_permissions",
-                joinColumn: { name: "permission_id", referencedColumnName: "id" },
-                inverseJoinColumn: { name: "role_id", referencedColumnName: "id" }
+                joinColumn: { name: "role_id", referencedColumnName: "id" },
+                inverseJoinColumn: { name: "permission_id", referencedColumnName: "id" }
         })
-        roles: Permission[]
+        permissions: Permission[]
 
 }

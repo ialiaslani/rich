@@ -7,6 +7,7 @@ import { PermissionSearchDto } from './Dtos/permission.search.dto';
 import { PermissionShowDto } from './Dtos/permission.show.dto';
 import { PermissionUpdateParamsDto, PermissionUpdatePayloadDto } from './Dtos/permission.update.dto';
 import { PermissionService } from './permission.service';
+import { HasPermission } from './permission.decorator';
 
 @ApiBearerAuth("access-token")
 @UseGuards(AuthGuard)
@@ -19,6 +20,7 @@ export class PermissionController {
         constructor (private permissionService: PermissionService) { }
 
         @Get("search")
+        @HasPermission()
         async search(@Query() payload: PermissionSearchDto) {
                 return await this.permissionService.search(payload)
         }

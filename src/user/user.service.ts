@@ -41,4 +41,16 @@ export class UserService {
                         image
                 })
         }
+
+        async findPermissions(id) {
+                const user = await this.userRepository.findOne({ where: { id }, relations: ["roles", "roles.permissions"] })
+
+                let permissions = []
+
+                user.roles.forEach(role => {
+                        permissions = [...permissions, ...role.permissions.map(permission => permission.name)]
+                })
+
+                return permissions
+        }
 }
