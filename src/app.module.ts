@@ -9,6 +9,10 @@ import { CommonModule } from './common/common.module';
 import { APP_GUARD } from '@nestjs/core';
 import { PermissionGuard } from './permission/permission.guard';
 import { PermissionGuardService } from './permission/permission.gurd.service';
+import { RequestLogModule } from './request_log/request_log.module';
+import { RequestGuard } from './request_log/request_log.guard';
+import { RequestLogGuardService } from './request_log/request_log.gurd.service';
+import { RequestLog } from './request_log/models/request_log.entity';
 
 @Module({
   imports: [
@@ -26,7 +30,9 @@ import { PermissionGuardService } from './permission/permission.gurd.service';
     UserModule,
     PermissionModule,
     RoleModule,
-    CommonModule
+    CommonModule,
+    RequestLogModule,
+    TypeOrmModule.forFeature([RequestLog])
   ],
   providers: [
     AppService,
@@ -34,7 +40,12 @@ import { PermissionGuardService } from './permission/permission.gurd.service';
       provide: APP_GUARD,
       useClass: PermissionGuard
     },
-    PermissionGuardService
+    PermissionGuardService,
+    {
+      provide: APP_GUARD,
+      useClass: RequestGuard
+    },
+    RequestLogGuardService
   ],
 })
 export class AppModule { }
