@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PermissionModule } from './permission/permission.module';
@@ -39,7 +38,6 @@ import { ConfigModule } from '@nestjs/config';
     CacheModule
   ],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: PermissionGuard
