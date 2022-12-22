@@ -23,7 +23,7 @@ export class PermissionGuard implements CanActivate {
     const request = context.switchToHttp().getRequest()
 
     const path = request.route.path.replace("/api", "")
-    const token = request.headers.authorization.replace("Bearer ", "")
+    const token = request.headers?.authorization?.replace("Bearer ", "")
 
 
     return await this.permissionGuardService.hasPermission(path, token);

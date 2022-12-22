@@ -12,6 +12,7 @@ import { PermissionGuardService } from './permission/permission.gurd.service';
 import { AppLoggerMiddleware } from './request_log/request_log.middleware';
 import { RequestLog } from './request_log/models/request_log.entity';
 import { RequestLogService } from './request_log/request_log.service';
+import { RequestLogModule } from './request_log/request_log.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { RequestLogService } from './request_log/request_log.service';
     PermissionModule,
     RoleModule,
     CommonModule,
-    TypeOrmModule.forFeature([RequestLog])
+    TypeOrmModule.forFeature([RequestLog]),
+    RequestLogModule
   ],
   providers: [
     AppService,

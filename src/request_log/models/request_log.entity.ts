@@ -1,5 +1,6 @@
 import { CommonEntity } from "src/common/models/common.entity";
-import { Column, Entity } from "typeorm";
+import { User } from "src/user/models/user.entity";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 
 @Entity("request_logs")
 export class RequestLog extends CommonEntity {
@@ -24,5 +25,9 @@ export class RequestLog extends CommonEntity {
 
         @Column({ nullable: true })
         ip: string
+
+        @ManyToOne(type => User, user => user.id)
+        @JoinColumn({ name: 'user_id' })
+        user: User;
 
 }
