@@ -14,19 +14,21 @@ import { RequestLog } from './request_log/models/request_log.entity';
 import { RequestLogService } from './request_log/request_log.service';
 import { RequestLogModule } from './request_log/request_log.module';
 import { CacheModule } from './cache/cache.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ envFilePath: `./.env` }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'rich',
-      autoLoadEntities: true,
+      type: process.env.DB_TYPE,
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      autoLoadEntities: process.env.DB_AUTO_LOAD_ENTITIES,
       synchronize: true,
-    }),
+    } as any),
     AuthModule,
     UserModule,
     PermissionModule,

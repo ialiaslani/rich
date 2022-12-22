@@ -16,10 +16,10 @@ import { CacheService } from './cache.service';
                         useFactory: () => {
                                 return {
                                         store: redisStore,
-                                        host: 'localhost',
-                                        port: 6379,
-                                        ttl: 300
-                                }
+                                        host: process.env.REDIS_HOST,
+                                        port: process.env.REDIS_PORT,
+                                        ttl: process.env.REDIS_TTL
+                                } as any
                         },
                 }),
         ],
