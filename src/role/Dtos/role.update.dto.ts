@@ -9,10 +9,21 @@ export class RoleUpdateParamsDto {
 
 }
 
+
+class RoleUpdatePermissionDto {
+        id: number
+}
+
 export class RoleUpdatePayloadDto {
 
         @ApiProperty()
         @IsNotEmpty()
         name: string;
 
+        @ApiProperty({
+                default: [{
+                        id: "number"
+                }]
+        })
+        permissions: RoleUpdatePermissionDto[];
 }

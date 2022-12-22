@@ -1,9 +1,10 @@
-import { ClassSerializerInterceptor, Controller, Get, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { UserSearchDto } from './models/user.search.dto';
+import { UserSearchDto } from './Dtos/user.search.dto';
 import { UserService } from './user.service';
+import { UserUpdateParamsDto, UserUpdatePayloadDto } from './Dtos/user.update.dto';
 
 @ApiBearerAuth("access-token")
 @UseGuards(AuthGuard)
@@ -17,6 +18,11 @@ export class UserController {
         @Get("search")
         async search(@Query() payload: UserSearchDto) {
                 return await this.userService.search(payload)
+        }
+
+        @Put("update/:id")
+        async update(@Param() param: UserUpdateParamsDto, @Body() payload: UserUpdatePayloadDto) {
+                return await this.userService.update(param, payload)
         }
 
         @Post("avatar")

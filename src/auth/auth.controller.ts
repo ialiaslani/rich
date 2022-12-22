@@ -1,7 +1,7 @@
 import { Body, Controller, Post, NotFoundException, BadRequestException, Res } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { LoginDto } from './models/login.dto';
-import { RegisterDto } from './models/register.dto';
+import { LoginDto } from './Dtos/login.dto';
+import { RegisterDto } from './Dtos/register.dto';
 import * as bcrypt from "bcrypt"
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
