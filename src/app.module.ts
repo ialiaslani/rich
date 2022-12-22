@@ -13,6 +13,7 @@ import { AppLoggerMiddleware } from './request_log/request_log.middleware';
 import { RequestLog } from './request_log/models/request_log.entity';
 import { RequestLogService } from './request_log/request_log.service';
 import { RequestLogModule } from './request_log/request_log.module';
+import { CacheModule } from './cache/cache.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { RequestLogModule } from './request_log/request_log.module';
     RoleModule,
     CommonModule,
     TypeOrmModule.forFeature([RequestLog]),
-    RequestLogModule
+    RequestLogModule,
+    CacheModule
   ],
   providers: [
     AppService,

@@ -3,9 +3,12 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UserModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
+import { CacheModule } from '../cache/cache.module';
 
 @Module({
   imports: [
+    CacheModule,
     UserModule,
     JwtModule.register({
       secret: "secretKey",
@@ -13,6 +16,6 @@ import { AuthGuard } from './auth.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthGuard, JwtService],
+  providers: [AuthGuard, JwtService, AuthService],
 })
 export class AuthModule { }
