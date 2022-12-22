@@ -6,6 +6,7 @@ import * as bcrypt from "bcrypt"
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
+import { HasPermission } from 'src/permission/permission.decorator';
 
 @Controller()
 @ApiTags('auth')
@@ -15,12 +16,13 @@ export class AuthController {
                 private jwtService: JwtService
         ) { }
 
+        @HasPermission("public")
         @Post("register")
         register(@Body() data: RegisterDto) {
                 return this.userService.create(data)
         }
 
-
+        @HasPermission("public")
         @Post("login")
         async login(@Body() { email, password }: LoginDto, @Res({ passthrough: true }) response: Response) {
                 const user = await this.userService.findOne({ email })

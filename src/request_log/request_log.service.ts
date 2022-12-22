@@ -4,18 +4,17 @@ import { RequestLog } from "./models/request_log.entity";
 import { Repository } from "typeorm";
 
 @Injectable()
-export class RequestLogGuardService {
+export class RequestLogService {
 
         constructor (
                 @InjectRepository(RequestLog) private readonly requestLogRepository: Repository<RequestLog>
         ) { }
 
         async saveRequestLog({
-                name,
                 user,
-                path
+                ...data
         }) {
 
-                return await this.requestLogRepository.save({ name, path })
+                return await this.requestLogRepository.save(data)
         }
 }

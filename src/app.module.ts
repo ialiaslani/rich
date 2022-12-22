@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -9,10 +9,9 @@ import { CommonModule } from './common/common.module';
 import { APP_GUARD } from '@nestjs/core';
 import { PermissionGuard } from './permission/permission.guard';
 import { PermissionGuardService } from './permission/permission.gurd.service';
-import { RequestLogModule } from './request_log/request_log.module';
-import { RequestGuard } from './request_log/request_log.guard';
-import { RequestLogGuardService } from './request_log/request_log.gurd.service';
+import { AppLoggerMiddleware } from './request_log/request_log.middleware';
 import { RequestLog } from './request_log/models/request_log.entity';
+import { RequestLogService } from './request_log/request_log.service';
 
 @Module({
   imports: [
@@ -31,7 +30,6 @@ import { RequestLog } from './request_log/models/request_log.entity';
     PermissionModule,
     RoleModule,
     CommonModule,
-    RequestLogModule,
     TypeOrmModule.forFeature([RequestLog])
   ],
   providers: [
@@ -41,11 +39,11 @@ import { RequestLog } from './request_log/models/request_log.entity';
       useClass: PermissionGuard
     },
     PermissionGuardService,
-    {
-      provide: APP_GUARD,
-      useClass: RequestGuard
-    },
-    RequestLogGuardService
+    RequestLogService
   ],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(AppLoggerMiddleware).forRoutes('*');
+  }
+}
