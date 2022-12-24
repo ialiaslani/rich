@@ -2,14 +2,15 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
 
-export class PermissionCreateDto {
+export class PermissionGenerateDto {
 
         @ApiProperty()
         @IsNotEmpty()
-        name: string;
+        permissions: string[];
+
 
         @ApiProperty()
         @IsNotEmpty()
-        pattern: string;
+        role_id: number;
 
 }

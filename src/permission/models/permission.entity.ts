@@ -7,4 +7,7 @@ export class Permission extends CommonEntity {
         @Column()
         name: string
 
+        @Column()
+        pattern: string
+
 }

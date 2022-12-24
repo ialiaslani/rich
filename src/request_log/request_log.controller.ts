@@ -15,7 +15,7 @@ export class RequestLogController {
 
         @Get("search")
         async search(@Query() payload: RequestLogSearchDto) {
-                return await this.requestLogService.search(payload, ["user"])
+                return await this.requestLogService.search({ ...payload, user: ":relation" })
         }
 
 }

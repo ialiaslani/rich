@@ -9,4 +9,13 @@ export class UserSearchDto {
         @ApiProperty()
         size: number
 
+        @ApiProperty({ required: false })
+        name: string
+
+        @ApiProperty({ required: false })
+        all: boolean
+
+        @ApiProperty({ required: false })
+        roles: string
+
 }

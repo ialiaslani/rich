@@ -7,6 +7,7 @@ import { PermissionSearchDto } from './Dtos/permission.search.dto';
 import { PermissionShowDto } from './Dtos/permission.show.dto';
 import { PermissionUpdateParamsDto, PermissionUpdatePayloadDto } from './Dtos/permission.update.dto';
 import { PermissionService } from './permission.service';
+import { PermissionGenerateDto } from './Dtos/permission.generate.dto';
 
 @ApiBearerAuth("access-token")
 @UseGuards(AuthGuard)
@@ -41,5 +42,15 @@ export class PermissionController {
         @Delete("delete/:id")
         async delete(@Param() payload: PermissionDeleteDto) {
                 return await this.permissionService.delete(payload)
+        }
+
+        @Get("allRoutes")
+        allRoutes(@Request() req) {
+                return this.permissionService.allRoutes(req)
+        }
+
+        @Post("generate")
+        async generate(@Body() payload: PermissionGenerateDto, @Request() req) {
+                return this.permissionService.generate(payload, req)
         }
 }

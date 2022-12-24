@@ -1,4 +1,4 @@
-import { Body, Controller, Post, NotFoundException, BadRequestException, Res } from '@nestjs/common';
+import { Body, Controller, Post, NotFoundException, BadRequestException, Res, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './Dtos/login.dto';
 import { RegisterDto } from './Dtos/register.dto';
@@ -9,6 +9,7 @@ import { HasPermission } from 'src/permission/permission.decorator';
 import { AuthService } from './auth.service';
 import { User } from 'src/user/models/user.entity';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller()
 @ApiTags('auth')
 export class AuthController {

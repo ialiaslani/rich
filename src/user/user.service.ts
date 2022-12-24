@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import { User } from './models/user.entity';
 import * as bcrypt from "bcrypt"
 import { CommonService } from 'src/common/common.service';
@@ -35,7 +35,7 @@ export class UserService extends CommonService {
                 let permissions = []
 
                 user.roles.forEach(role => {
-                        permissions = [...permissions, ...role.permissions.map(permission => permission.name)]
+                        permissions = [...permissions, ...role.permissions.map(permission => permission.pattern)]
                 })
 
                 return permissions
