@@ -8,4 +8,9 @@
 5. add .env *DONE
 6. add filters *DONE
 7. add csv export
-7. add dwonload avatar
+8. add dwonload avatar
+9. add user status
+10. validate permission (no match, wrong structure) *DONE
+11. load user permissions
+12. update user's permission
+13. name the routes

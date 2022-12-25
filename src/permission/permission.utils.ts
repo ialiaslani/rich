@@ -11,6 +11,10 @@ export class PermissionUtils {
                         permissionString = permissionString.substring(1)
                 permissionString = permissionString.replace(/[/]/g, '.')
 
+                if (permissionString.split(".").length !== 4) {
+                        throw new Error("Wrong Route Structure! Not Matching Pattern [scope].[microservice].[module].[action]")
+                }
+
                 return permissionString
         }
 
@@ -65,6 +69,12 @@ export class PermissionUtils {
         }
 
         generatePermission(allRoutes: string[], selectedRoutes: string[]) {
+
+                for (const selectedRoute of selectedRoutes) {
+                        if (!allRoutes.includes(selectedRoute)) {
+                                throw new Error("Provided Route " + selectedRoute + " Doesn't Exist!")
+                        }
+                }
 
                 let patterns = []
                 let hasOnes = [false, false, false, false]
