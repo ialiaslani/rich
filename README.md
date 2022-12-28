@@ -11,6 +11,9 @@
 8. add dwonload avatar
 9. add user status
 10. validate permission (no match, wrong structure) *DONE
-11. load user permissions
-12. update user's permission
-13. name the routes
+11. update role's permission
+12. name the routes
+13. seed
+14. model generator (crud gnerator) *DONE
+15. notification
+15. socket (emqx) (for backup service)

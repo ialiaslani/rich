@@ -17,7 +17,7 @@ export class UserController {
 
         @Get("search")
         async search(@Query() payload: UserSearchDto) {
-                return await this.userService.search({...payload, roles: ":relation"})
+                return await this.userService.search({ ...payload, roles: ":relation" })
         }
 
         @Put("update/:id")
