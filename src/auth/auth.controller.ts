@@ -28,31 +28,41 @@ export class AuthController {
         @HasPermission("public")
         @Post("login")
         async login(@Body() { email, password }: LoginDto) {
-                const user: User = await this.userService.findOne({ email })
-
-                const blocked = await this.authService.getCache("user_" + user.id)
-
-                if (blocked.name) {
-                        throw new BadRequestException(`Sorry ${blocked.name} Please Try Again After ${blocked.ttl} Seconds`)
-                }
-
+                let user: User = await this.userService.findOne({ email })
 
                 if (!user) {
                         throw new NotFoundException("User Not Fount")
                 }
 
+                const blocked = await this.authService.getCache("user_" + user.id)
+
+                if (blocked.value) {
+                        throw new BadRequestException(`Sorry ${blocked.value} Please Try Again After ${blocked.ttl} Seconds`)
+                }
+
 
                 if (! await bcrypt.compare(password, user.password)) {
-                        await this.authService.setCache("user_" + user.id, user.name)
+                        const numberOfTries = +(await this.authService.getCache("number_of_tries_" + user.id)).value || 0
+
+                        if (numberOfTries >= 3) {
+                                await this.authService.deleteCache("number_of_tries_" + user.id)
+                                await this.authService.setCache("user_" + user.id, user.name)
+                                await this.userService.update(user.id, { status: "BLOCKED" })
+                        }
+
+                        await this.authService.setCache("number_of_tries_" + user.id, `${numberOfTries + 1}`)
+
                         throw new BadRequestException("Invalid Password!")
                 }
 
 
-                const token = await this.jwtService.signAsync({ id: user.id }, { secret: "secretKey" })
+                const token = await this.jwtService.signAsync({ id: user.id }, { secret: process.env.TOKEN_SECRET })
 
-                console.log('====================================');
-                console.log(await this.authService.getAllData());
-                console.log('====================================');
+
+                if (user.status === "BLOCKED") {
+                        await this.userService.update(user.id, { status: "ACTIVE" })
+                        user = await this.userService.findOne({ email })
+                }
 
                 return { user, token }
 

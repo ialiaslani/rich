@@ -7,8 +7,8 @@ export class CacheService {
                 @Inject(CACHE_MANAGER) private readonly cache: Cache,
         ) { }
 
-        async setCache(key: string, name: string): Promise<void> {
-                await this.cache.set(key, name);
+        async setCache(key: string, value: string): Promise<void> {
+                await this.cache.set(key, value);
         }
 
         async deleteCache(key: string): Promise<void> {
@@ -20,12 +20,12 @@ export class CacheService {
         }
 
         async getCache(key: string): Promise<{
-                key: string, name: string, ttl: number
+                key: string, value: string, ttl: number
         }> {
-                const name = await this.cache.get(key) as string;
+                const value = await this.cache.get(key) as string;
                 const ttl = await this.cache.store.ttl(key)
                 return {
-                        key, name, ttl
+                        key, value, ttl
                 };
         }
 

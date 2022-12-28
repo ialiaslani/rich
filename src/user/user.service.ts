@@ -19,8 +19,11 @@ export class UserService extends CommonService {
         }
 
         async update(params, data): Promise<any> {
-                const hash = await bcrypt.hash(data.password, 12)
-                return await this.repository.update(params, { ...data, password: hash })
+                let hash: undefined | string = undefined
+                if (data.password) {
+                        hash = await bcrypt.hash(data.password, 12)
+                }
+                return await this.repository.update(params, { ...data, ...(hash && { password: hash }) })
         }
 
         async saveAvatar(id, image = ""): Promise<any> {

@@ -11,7 +11,7 @@ import { CacheModule } from '../cache/cache.module';
     CacheModule,
     UserModule,
     JwtModule.register({
-      secret: "secretKey",
+      secret: process.env.TOKEN_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
   ],

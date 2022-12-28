@@ -12,6 +12,9 @@ export class User extends CommonEntity {
         @Column()
         email: string;
 
+        @Column({ default: "ACTIVE" })
+        status: "ACTIVE" | "DEACTIVE" | "BLOCKED";
+
         @Column({ nullable: true })
         image: string;
 
