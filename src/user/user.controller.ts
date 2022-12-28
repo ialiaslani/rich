@@ -17,7 +17,7 @@ export class UserController {
 
         @Get("search")
         async search(@Query() payload: UserSearchDto, @Response() res) {
-                const data = await this.userService.search({ ...payload, roles: ":relation", sheetName: "users" })
+                const data = await this.userService.search({ ...payload, roles: ":relation", ...(payload.getExcel && { sheetName: "users" }) })
 
                 if (payload.getExcel) {
                         res.header(
@@ -28,7 +28,7 @@ export class UserController {
                                 .send(data);
                 }
 
-                return data
+                res.send(data)
         }
 
         @Put("update/:id")

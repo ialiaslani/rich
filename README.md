@@ -7,7 +7,7 @@
 4. add redis too login *DONE
 5. add .env *DONE
 6. add filters *DONE
-7. add csv export
+7. add csv export *DONE
 8. add dwonload avatar
 9. add user status *DONE
 10. validate permission (no match, wrong structure) *DONE

@@ -14,7 +14,9 @@ export abstract class CommonService extends ExcelService {
 
         async search(payload, columns?: { header: string, key: string, width: number }[]) {
 
-                const { size = 10, page = 1, all, getExcel, ...params }: { size?: number, page?: number, all?: boolean, getExcel?: boolean } & { [key in string]: string } = payload
+                const { size = 10, page = 1, all, getExcel, ...params }:
+                        { size?: number, page?: number, all?: boolean, getExcel?: boolean } & { [key in string]: string }
+                        = payload
 
                 let query = this.repository.createQueryBuilder("repository")
 
