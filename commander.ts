@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { Command, CommandFactory, CommandRunner, Option, } from 'nest-commander';
 import * as fs from "fs"
 
@@ -15,7 +15,7 @@ export class CrudCommand extends CommandRunner {
     if (options?.permission) {
       this.runWithoutPermission(passedParam);
     } else {
-      await this.runWithNone(passedParam);
+      await this.runCrud(passedParam, true);
     }
   }
 
@@ -24,11 +24,11 @@ export class CrudCommand extends CommandRunner {
     description: 'a crud without permission',
   })
   async runWithoutPermission(param: string[]): Promise<void> {
-    return this.runWithNone(param)
+    return this.runCrud(param)
   }
 
 
-  async runWithNone(param: string[]): Promise<void> {
+  async runCrud(param: string[], noPermission?: boolean): Promise<void> {
 
     const [name] = param
 
@@ -47,7 +47,7 @@ export class CrudCommand extends CommandRunner {
     fs.mkdirSync(path)
     fs.writeFile(`${path}/${ModuleName}.module.ts`, this.generateModule(ModuleName), () => { })
     fs.writeFile(`${path}/${ModuleName}.service.ts`, this.generateService(ModuleName), () => { })
-    fs.writeFile(`${path}/${ModuleName}.controller.ts`, this.generateController(ModuleName), () => { })
+    fs.writeFile(`${path}/${ModuleName}.controller.ts`, this.generateController(ModuleName, noPermission), () => { })
 
     fs.mkdirSync(path + "/model")
     fs.writeFile(`${path}/model/${ModuleName}.entity.ts`, this.generateEntity(ModuleName), () => { })
@@ -58,6 +58,9 @@ export class CrudCommand extends CommandRunner {
     fs.writeFile(`${path}/dto/${ModuleName}.search.dto.ts`, this.generateSearchDto(ModuleName), () => { })
     fs.writeFile(`${path}/dto/${ModuleName}.show.dto.ts`, this.generateParamsDto(ModuleName, "Show"), () => { })
     fs.writeFile(`${path}/dto/${ModuleName}.update.dto.ts`, this.generateUpdateDto(ModuleName), () => { })
+
+    Logger.log(`Please Add ${this.generateModuleName(ModuleName, true)}Module In AppModule Imports`)
+
   }
 
 
@@ -174,7 +177,7 @@ export class CrudCommand extends CommandRunner {
 
 
 
-  generateController(name: string) {
+  generateController(name: string, noPermission?: boolean) {
 
     const ControllerName = this.generateModuleName(name, true)
 
@@ -200,6 +203,7 @@ export class CrudCommand extends CommandRunner {
     import { ${ControllerName}ShowDto } from './dto/${name}.show.dto';
     import { ${ControllerName}SearchDto } from './dto/${name}.search.dto';
     import { ${ControllerName}Service } from './${name}.service';
+    ${noPermission ? "import { HasPermission } from 'src/permission/permission.decorator';" : ''}
 
     @ApiBearerAuth("access-token")
     @UseGuards(AuthGuard)
@@ -210,26 +214,32 @@ export class CrudCommand extends CommandRunner {
 
           constructor (private ${name}Service: ${ControllerName}Service) { }
 
+        
+        ${noPermission ? '@HasPermission("public")' : ''}
           @Get("search")
           async search(@Query() payload: ${ControllerName}SearchDto) {
                   return await this.${name}Service.search(payload)
           }
 
+        ${noPermission ? '@HasPermission("public")' : ''}
           @Get("show/:id")
           async show(@Query() payload: ${ControllerName}ShowDto) {
                   return await this.${name}Service.findOne(payload)
           }
 
+        ${noPermission ? '@HasPermission("public")' : ''}
           @Post("create")
           async create(@Body() payload: ${ControllerName}CreateDto) {
                   return await this.${name}Service.create(payload)
           }
 
+        ${noPermission ? '@HasPermission("public")' : ''}
           @Put("update/:id")
           async update(@Param() param: ${ControllerName}UpdateParamsDto, @Body() payload: ${ControllerName}UpdatePayloadDto) {
                   return await this.${name}Service.update(param, payload)
           }
 
+        ${noPermission ? '@HasPermission("public")' : ''}
           @Delete("delete/:id")
           async delete(@Param() payload: ${ControllerName}DeleteDto) {
                   return await this.${name}Service.delete(payload)

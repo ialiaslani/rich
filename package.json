@@ -1,8 +1,8 @@
 {
-  "name": "nest-api",
+  "name": "rich",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "dilemma",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
