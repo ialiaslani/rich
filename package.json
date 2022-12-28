@@ -34,6 +34,8 @@
     "cache-manager-ioredis": "^2.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "date-fns-jalali": "^2.29.3-0",
+    "exceljs": "^4.3.0",
     "nest-commander": "^3.3.0",
     "passport-jwt": "^4.0.0",
     "pg": "^8.8.0",

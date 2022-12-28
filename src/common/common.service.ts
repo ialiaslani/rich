@@ -1,21 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { ExcelService } from 'src/excel/excel.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export abstract class CommonService {
+export abstract class CommonService extends ExcelService {
 
         protected constructor (
-                protected readonly repository: Repository<any>
-        ) { }
+                protected readonly repository: Repository<any>,
+        ) {
+                super()
+        }
 
 
-        async search(payload) {
+        async search(payload, columns?: { header: string, key: string, width: number }[]) {
 
-                const { size = 10, page = 1, all, ...params }: { size?: number, page?: number, all?: boolean } & { [key in string]: string } = payload
+                const { size = 10, page = 1, all, getExcel, ...params }: { size?: number, page?: number, all?: boolean, getExcel?: boolean } & { [key in string]: string } = payload
 
                 let query = this.repository.createQueryBuilder("repository")
 
-                if (!all) {
+                if (!all || !getExcel) {
                         query.skip((page - 1) * size)
                         query.take(size)
                 }
@@ -33,6 +36,10 @@ export abstract class CommonService {
 
                 const [data, total] = await query.getManyAndCount()
 
+                if (getExcel) {
+                        const defaultColumns = Object.keys(data[0] || []).map(key => ({ header: key, key, width: 30 }))
+                        return await this.exportExcel(params.sheetName || "deafult", data, columns || defaultColumns)
+                }
 
                 return {
                         data,

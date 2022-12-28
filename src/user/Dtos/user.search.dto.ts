@@ -16,6 +16,9 @@ export class UserSearchDto {
         all: boolean
 
         @ApiProperty({ required: false })
+        getExcel: boolean
+
+        @ApiProperty({ required: false })
         roles: string
 
 }

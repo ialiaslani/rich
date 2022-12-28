@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Put, Query, Response, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -16,8 +16,19 @@ export class UserController {
         constructor (private userService: UserService) { }
 
         @Get("search")
-        async search(@Query() payload: UserSearchDto) {
-                return await this.userService.search({ ...payload, roles: ":relation" })
+        async search(@Query() payload: UserSearchDto, @Response() res) {
+                const data = await this.userService.search({ ...payload, roles: ":relation", sheetName: "users" })
+
+                if (payload.getExcel) {
+                        res.header(
+                                "Content-type",
+                                "application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        )
+                                .header("Content-Disposition", 'Content-Disposition: attachment; filename="users.xls"')
+                                .send(data);
+                }
+
+                return data
         }
 
         @Put("update/:id")

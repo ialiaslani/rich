@@ -9,7 +9,7 @@
 6. add filters *DONE
 7. add csv export
 8. add dwonload avatar
-9. add user status
+9. add user status *DONE
 10. validate permission (no match, wrong structure) *DONE
 11. update role's permission
 12. name the routes

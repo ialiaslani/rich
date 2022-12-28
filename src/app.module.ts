@@ -35,7 +35,7 @@ import { ConfigModule } from '@nestjs/config';
     CommonModule,
     TypeOrmModule.forFeature([RequestLog]),
     RequestLogModule,
-    CacheModule
+    CacheModule,
   ],
   providers: [
     {
