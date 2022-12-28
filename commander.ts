@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { Command, CommandFactory, CommandRunner, Option, } from 'nest-commander';
 import * as fs from "fs"
 
@@ -59,7 +59,7 @@ export class CrudCommand extends CommandRunner {
     fs.writeFile(`${path}/dto/${ModuleName}.show.dto.ts`, this.generateParamsDto(ModuleName, "Show"), () => { })
     fs.writeFile(`${path}/dto/${ModuleName}.update.dto.ts`, this.generateUpdateDto(ModuleName), () => { })
 
-    Logger.log(`Please Add ${this.generateModuleName(ModuleName, true)}Module In AppModule Imports`)
+    console.log(`Please Add ${this.generateModuleName(ModuleName, true)}Module In AppModule Imports`)
 
   }
 
@@ -90,7 +90,7 @@ export class CrudCommand extends CommandRunner {
     `
   }
 
-  generateParamsDto(name: string, type: "Show" | "Delete" | "Update") {
+  generateParamsDto(name: string, type: "Show" | "Delete" | "UpdateParams") {
 
     const ParamsDtoName = this.generateModuleName(name, true)
 
@@ -101,7 +101,7 @@ export class CrudCommand extends CommandRunner {
     `
   }
 
-  generateCreateOrUpdateDto(name: string, type: "Create" | "Update") {
+  generateCreateOrUpdateDto(name: string, type: "Create" | "UpdatePayload") {
 
     const dtoName = this.generateModuleName(name, true)
 
@@ -113,9 +113,9 @@ export class CrudCommand extends CommandRunner {
   generateUpdateDto(name: string) {
 
     return `
-    ${this.generateParamsDto(name, "Update")}
+    ${this.generateParamsDto(name, "UpdateParams")}
 
-    ${this.generateCreateOrUpdateDto(name, "Update")}
+    ${this.generateCreateOrUpdateDto(name, "UpdatePayload")}
     
     `
 
