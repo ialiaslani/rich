@@ -8,13 +8,14 @@
 5. add .env *DONE
 6. add filters *DONE
 7. add csv export *DONE
-8. add dwonload avatar
+8. add dwonload avatar *DONE
 9. add user status *DONE
 10. validate permission (no match, wrong structure) *DONE
-11. update role's permission
+11. model generator (crud gnerator) *DONE
+
 12. name the routes
 13. seed
-14. model generator (crud gnerator) *DONE
+14. update role's permission
 15. notification
 16. socket (emqx) (for backup service)
 17. refolder

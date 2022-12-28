@@ -14,6 +14,7 @@ import { RequestLogService } from './request_log/request_log.service';
 import { RequestLogModule } from './request_log/request_log.module';
 import { CacheModule } from './cache/cache.module';
 import { ConfigModule } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -36,6 +37,9 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forFeature([RequestLog]),
     RequestLogModule,
     CacheModule,
+    MulterModule.register({
+      dest: './upload',
+    })
   ],
   providers: [
     {

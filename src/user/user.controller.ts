@@ -1,10 +1,12 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Put, Query, Response, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Put, Query, Res, Response, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UserSearchDto } from './Dtos/user.search.dto';
 import { UserService } from './user.service';
 import { UserUpdateParamsDto, UserUpdatePayloadDto } from './Dtos/user.update.dto';
+import { diskStorage } from 'multer';
+import { editFileName, imageFileFilter } from 'src/file/file.utils';
 
 @ApiBearerAuth("access-token")
 @UseGuards(AuthGuard)
@@ -39,8 +41,14 @@ export class UserController {
                 return await this.userService.update(param, payload)
         }
 
-        @Post("avatar")
-        @UseInterceptors(FileInterceptor("avatar"))
+        @Post("upload_avatar/:id")
+        @UseInterceptors(FileInterceptor("avatar", {
+                storage: diskStorage({
+                        destination: './upload',
+                        filename: editFileName,
+                }),
+                fileFilter: imageFileFilter,
+        }))
         @ApiConsumes('multipart/form-data')
         @ApiProperty()
         @ApiBody({
@@ -54,8 +62,22 @@ export class UserController {
                         },
                 },
         })
-        upload(@Param("id") id, @UploadedFile() avatar) {
-                return this.userService.saveAvatar(id, avatar.buffer.toString())
+        async upload(@Param() { id }: UserUpdateParamsDto, @UploadedFile() avatar) {
+                const fileReponse = {
+                        originalname: avatar.originalname,
+                        filename: avatar.filename,
+                };
+
+                await this.userService.saveAvatar(id, fileReponse.filename)
+
+                return fileReponse
+        }
+
+
+        @Get("get_avatar/:id")
+        async getAvatar(@Param() { id }: UserUpdateParamsDto, @Res() res) {
+                const user = await this.userService.findOne({id})
+                return res.sendFile(user.image, { root: './upload' });
         }
 }
 
