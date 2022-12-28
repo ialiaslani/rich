@@ -17,7 +17,7 @@ export class UserController {
 
         @Get("search")
         async search(@Query() payload: UserSearchDto, @Response() res) {
-                const data = await this.userService.search({ ...payload, roles: ":relation", ...(payload.getExcel && { sheetName: "users" }) })
+                let data = await this.userService.search({ ...payload, roles: ":relation", ...(payload.getExcel && { sheetName: "users" }) })
 
                 if (payload.getExcel) {
                         res.header(
@@ -27,6 +27,9 @@ export class UserController {
                                 .header("Content-Disposition", 'Content-Disposition: attachment; filename="users.xls"')
                                 .send(data);
                 }
+
+                if ("data" in data)
+                        data.data = data.data.map(({ password, ...d }) => (d))
 
                 res.send(data)
         }
