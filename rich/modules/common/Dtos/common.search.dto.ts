@@ -9,4 +9,7 @@ export class CommonSearchDto {
         @ApiProperty()
         size: number
 
+        @ApiProperty({ required: false })
+        getExcel: boolean
+
 }

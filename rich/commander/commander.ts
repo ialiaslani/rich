@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { Command, CommandFactory, CommandRunner, Option, } from 'nest-commander';
 import * as fs from "fs"
+import { resolve } from 'path';
 
 interface CrudCommandOptions {
   permission?: boolean;
@@ -38,7 +39,7 @@ export class CrudCommand extends CommandRunner {
 
     const ModuleName = this.generateModuleName(name)
 
-    const path = __dirname + "/src/" + ModuleName
+    const path = resolve(__dirname + "../../../src/" + ModuleName)
 
     if (fs.existsSync(path)) {
       throw new Error('Directory exists!')
@@ -193,7 +194,8 @@ export class CrudCommand extends CommandRunner {
       Body,
       Post,
       Put,
-      Delete
+      Delete,
+      Response
     } from '@nestjs/common';
     import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
     import { AuthGuard } from '@rich';
@@ -203,7 +205,7 @@ export class CrudCommand extends CommandRunner {
     import { ${ControllerName}ShowDto } from './dto/${name}.show.dto';
     import { ${ControllerName}SearchDto } from './dto/${name}.search.dto';
     import { ${ControllerName}Service } from './${name}.service';
-    ${noPermission ? "import { HasPermission } from 'src/permission/permission.decorator';" : ''}
+    ${!noPermission ? "import { HasPermission } from '@rich';" : ''}
 
     @ApiBearerAuth("access-token")
     @UseGuards(AuthGuard)
@@ -215,31 +217,43 @@ export class CrudCommand extends CommandRunner {
           constructor (private ${name}Service: ${ControllerName}Service) { }
 
         
-        ${noPermission ? '@HasPermission("public")' : ''}
+        ${!noPermission ? '@HasPermission("public")' : ''}
           @Get("search")
-          async search(@Query() payload: ${ControllerName}SearchDto) {
-                  return await this.${name}Service.search(payload)
+          async search(@Query() payload: ${ControllerName}SearchDto, @Response() res) {
+            let data = await this.${name}Service.search({ ...payload, ...(payload.getExcel && { sheetName: "${name}" }) })
+
+            if (payload.getExcel) {
+                    res.header(
+                            "Content-type",
+                            "application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+                            .header("Content-Disposition", 'Content-Disposition: attachment; filename="${name}.xls"')
+                            .send(data);
+            }
+
+
+            res.send(data)
           }
 
-        ${noPermission ? '@HasPermission("public")' : ''}
+        ${!noPermission ? '@HasPermission("public")' : ''}
           @Get("show/:id")
           async show(@Query() payload: ${ControllerName}ShowDto) {
                   return await this.${name}Service.findOne(payload)
           }
 
-        ${noPermission ? '@HasPermission("public")' : ''}
+        ${!noPermission ? '@HasPermission("public")' : ''}
           @Post("create")
           async create(@Body() payload: ${ControllerName}CreateDto) {
                   return await this.${name}Service.create(payload)
           }
 
-        ${noPermission ? '@HasPermission("public")' : ''}
+        ${!noPermission ? '@HasPermission("public")' : ''}
           @Put("update/:id")
           async update(@Param() param: ${ControllerName}UpdateParamsDto, @Body() payload: ${ControllerName}UpdatePayloadDto) {
                   return await this.${name}Service.update(param, payload)
           }
 
-        ${noPermission ? '@HasPermission("public")' : ''}
+        ${!noPermission ? '@HasPermission("public")' : ''}
           @Delete("delete/:id")
           async delete(@Param() payload: ${ControllerName}DeleteDto) {
                   return await this.${name}Service.delete(payload)

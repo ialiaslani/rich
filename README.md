@@ -13,11 +13,11 @@
 10. validate permission (no match, wrong structure) *DONE
 11. model generator (crud gnerator) *DONE
 12. refolder *DONE
+13. add excel too Crud Generator *DONE
 
-13. seed
 14. update role's permission
 15. notification
 16. socket (emqx) (for backup service)
 17. name the routes
-18. add excel too Crud Generator
+18. seed
 19. add ELASTIC
