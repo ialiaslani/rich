@@ -1,6 +1,7 @@
 # compiled output
 /dist
 /node_modules
+/upload
 
 # Logs
 logs
@@ -34,3 +35,6 @@ package-lock.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+#ENV
+.env
