@@ -1,23 +1,22 @@
 
 #todo:
 
-1. currect the realtions in cruds *DONE
-2. refactore services to use common service *DONE
-3. role engine *DONE
-4. add redis too login *DONE
-5. add .env *DONE
-6. add filters *DONE
-7. add csv export *DONE
-8. add dwonload avatar *DONE
-9. add user status *DONE
-10. validate permission (no match, wrong structure) *DONE
-11. model generator (crud gnerator) *DONE
-12. refolder *DONE
-13. add excel too Crud Generator *DONE
-
-14. update role's permission
-15. notification
-16. socket (emqx) (for backup service)
-17. name the routes
-18. seed
-19. add ELASTIC
+1. - [x] currect the realtions in cruds
+2. - [x] refactore services to use common service
+3. - [x] role engine
+4. - [x] add redis too login
+5. - [x] add .env
+6. - [x] add filter
+7. - [x] add csv export
+8. - [x] add dwonload avatar
+9. - [x] add user status *DONE
+10. - [x] validate permission (no match, wrong structure)
+11. - [x] model generator (crud gnerator)
+12. - [x] refolder
+13. - [x] add excel too Crud Generator
+14. - [ ] update role's permission
+15. - [ ] notification
+16. - [ ] socket (emqx) (for backup service)
+17. - [ ] name the routes
+18. - [ ] seed
+19. - [ ] add ELASTIC
