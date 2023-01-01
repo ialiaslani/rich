@@ -6,6 +6,7 @@ Rich Is A Nestjs System Designed To Handle Needed Requirements In Usuall Project
 3. user
 4. request log
 5. crud
+
 And A Lot More In Near Future!
  
  ## Rich Command Line:
