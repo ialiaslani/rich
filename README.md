@@ -1,23 +1,16 @@
+### Rich
 
-#todo:
-
-1. currect the realtions in cruds *DONE
-2. refactore services to use common service *DONE
-3. role engine *DONE
-4. add redis too login *DONE
-5. add .env *DONE
-6. add filters *DONE
-7. add csv export *DONE
-8. add dwonload avatar *DONE
-9. add user status *DONE
-10. validate permission (no match, wrong structure) *DONE
-11. model generator (crud gnerator) *DONE
-12. refolder *DONE
-13. add excel too Crud Generator *DONE
-
-14. update role's permission
-15. notification
-16. socket (emqx) (for backup service)
-17. name the routes
-18. seed
-19. add ELASTIC
+# Rich Is A Nestjs System Designed To Handle Needed Requirements In Usuall Projects Like:
+1. permission
+2. role
+3. user
+4. request log
+5. crud
+ # And A Lot More In Near Future!
+ 
+ ## Rich Command Line:
+ # You Can Add A New Crud In Your App With Handled Swagger, Permission, Crud, Dtos And etc Just With Using:
+ # `yarn rich crud test` And Alos There Is A -p Flag If You Want Your Routes To Be Public!
+ 
+ ## Rich Crud
+ # Rich Crud Suports Dynamic Query On Entity, Export Excel, Load Relations And Permissions Too!
