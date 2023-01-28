@@ -7,9 +7,7 @@ import { RoleService } from './role.service';
 import { AuthGuard } from '../auth/auth.guard';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Role])
-  ],
+  imports: [TypeOrmModule.forFeature([Role])],
   controllers: [RoleController],
   providers: [RoleService, AuthGuard, JwtService],
 })

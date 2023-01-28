@@ -8,10 +8,8 @@ import { PermissionUtils } from './permission.utils';
 import { AuthGuard } from '../auth/auth.guard';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Permission])
-  ],
+  imports: [TypeOrmModule.forFeature([Permission])],
   controllers: [PermissionController],
   providers: [AuthGuard, JwtService, PermissionService, PermissionUtils],
 })
-export class PermissionModule { }
+export class PermissionModule {}

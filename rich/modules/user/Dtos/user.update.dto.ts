@@ -2,36 +2,32 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { CommonParamsDto } from '../../common/Dtos/common.params.dto';
 
-
-export class UserUpdateParamsDto extends CommonParamsDto { }
-
+export class UserUpdateParamsDto extends CommonParamsDto {}
 
 class UserUpdateRolesDto {
-        id: number
+  id: number;
 }
 
 export class UserUpdatePayloadDto {
+  @IsNotEmpty()
+  @ApiProperty()
+  name: string;
 
-        @IsNotEmpty()
-        @ApiProperty()
-        name: string
+  @IsNotEmpty()
+  @IsEmail()
+  @ApiProperty()
+  email: string;
 
-        @IsNotEmpty()
-        @IsEmail()
-        @ApiProperty()
-        email: string
+  @IsNotEmpty()
+  @ApiProperty()
+  password: string;
 
-        @IsNotEmpty()
-        @ApiProperty()
-        password: string
-
-
-
-        @ApiProperty({
-                default: [{
-                        id: "number"
-                }]
-        })
-        roles: UserUpdateRolesDto[];
-
+  @ApiProperty({
+    default: [
+      {
+        id: 'number',
+      },
+    ],
+  })
+  roles: UserUpdateRolesDto[];
 }

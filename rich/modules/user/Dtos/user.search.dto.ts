@@ -1,24 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-
 export class UserSearchDto {
+  @ApiProperty()
+  page: number;
 
-        @ApiProperty()
-        page: number
+  @ApiProperty()
+  size: number;
 
-        @ApiProperty()
-        size: number
+  @ApiProperty({ required: false })
+  name: string;
 
-        @ApiProperty({ required: false })
-        name: string
+  @ApiProperty({ required: false })
+  all: boolean;
 
-        @ApiProperty({ required: false })
-        all: boolean
+  @ApiProperty({ required: false })
+  getExcel: boolean;
 
-        @ApiProperty({ required: false })
-        getExcel: boolean
-
-        @ApiProperty({ required: false })
-        roles: string
-
+  @ApiProperty({ required: false })
+  roles: string;
 }

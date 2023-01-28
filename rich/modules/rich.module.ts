@@ -34,14 +34,14 @@ export const RichImports = (dbConfig: object) => [
   CacheModule,
   MulterModule.register({
     dest: './upload',
-  })
-]
+  }),
+];
 
 export const RichProviders = [
   {
     provide: APP_GUARD,
-    useClass: PermissionGuard
+    useClass: PermissionGuard,
   },
   PermissionGuardService,
-  RequestLogService
-]
+  RequestLogService,
+];

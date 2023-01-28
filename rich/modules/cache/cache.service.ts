@@ -3,41 +3,43 @@ import { Cache } from 'cache-manager';
 
 @Injectable()
 export class CacheService {
-        constructor (
-                @Inject(CACHE_MANAGER) private readonly cache: Cache,
-        ) { }
+  constructor(@Inject(CACHE_MANAGER) private readonly cache: Cache) {}
 
-        async setCache(key: string, value: string): Promise<void> {
-                await this.cache.set(key, value);
-        }
+  async setCache(key: string, value: string): Promise<void> {
+    await this.cache.set(key, value);
+  }
 
-        async deleteCache(key: string): Promise<void> {
-                await this.cache.del(key);
-        }
+  async deleteCache(key: string): Promise<void> {
+    await this.cache.del(key);
+  }
 
-        async resetCache(): Promise<void> {
-                await this.cache.reset();
-        }
+  async resetCache(): Promise<void> {
+    await this.cache.reset();
+  }
 
-        async getCache(key: string): Promise<{
-                key: string, value: string, ttl: number
-        }> {
-                const value: string = await this.cache.get(key)
-                const ttl = await this.cache.store.ttl(key)
-                return {
-                        key, value, ttl
-                };
-        }
+  async getCache(key: string): Promise<{
+    key: string;
+    value: string;
+    ttl: number;
+  }> {
+    const value: string = await this.cache.get(key);
+    const ttl = await this.cache.store.ttl(key);
+    return {
+      key,
+      value,
+      ttl,
+    };
+  }
 
-        async getAllData() {
-                //Get all keys
-                const keys = await this.cache.store.keys();
+  async getAllData() {
+    //Get all keys
+    const keys = await this.cache.store.keys();
 
-                //Loop through keys and get data
-                let allData: { [key: string]: any } = {};
-                for (const key of keys) {
-                        allData[key] = await this.cache.get(key);
-                }
-                return allData;
-        }
+    //Loop through keys and get data
+    const allData: { [key: string]: any } = {};
+    for (const key of keys) {
+      allData[key] = await this.cache.get(key);
+    }
+    return allData;
+  }
 }
