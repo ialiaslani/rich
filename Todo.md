@@ -20,3 +20,5 @@
 17. - [ ] name the routes
 18. - [ ] seed
 19. - [ ] add ELASTIC
+20. - [ ] add linters
+21. 

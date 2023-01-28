@@ -15,3 +15,11 @@ You Can Add A New Crud In Your App With Handled Swagger, Permission, Crud, Dtos 
  
  ## Rich Crud
 Rich Crud Suports Dynamic Query On Entity, Export Excel, Load Relations And Permissions Too!
+
+ ## Rich Requirements
+You Need To Have: 
+1. node
+2. yarn
+3. redis
+4. ts-node
+5. git
