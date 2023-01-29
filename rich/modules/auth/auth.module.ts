@@ -18,4 +18,4 @@ import { CacheModule } from '../cache/cache.module';
   controllers: [AuthController],
   providers: [AuthGuard, JwtService, AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

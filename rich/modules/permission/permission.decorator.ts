@@ -1,3 +1,3 @@
-import { SetMetadata } from "@nestjs/common";
+import { SetMetadata } from '@nestjs/common';
 
-export const HasPermission = (type: "public" | "private") => SetMetadata("access", type === "public")
+export const HasPermission = (type: 'public' | 'private') => SetMetadata('access', type === 'public');

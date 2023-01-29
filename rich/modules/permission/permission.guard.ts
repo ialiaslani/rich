@@ -4,26 +4,17 @@ import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
+  constructor(private permissionGuardService: PermissionGuardService, private reflector: Reflector) {}
 
-  constructor (
-    private permissionGuardService: PermissionGuardService,
-    private reflector: Reflector
-  ) { }
+  async canActivate(context: ExecutionContext) {
+    const publicRoute = this.reflector.get('access', context.getHandler());
 
+    if (publicRoute) return true;
 
-  async canActivate(
-    context: ExecutionContext,
-  ) {
+    const request = context.switchToHttp().getRequest();
 
-    const publicRoute = this.reflector.get("access", context.getHandler())
-
-    if (publicRoute) return true
-
-    const request = context.switchToHttp().getRequest()
-
-    const path = request.route.path.replace("/api", "")
-    const token = request.headers?.authorization?.replace("Bearer ", "")
-
+    const path = request.route.path.replace('/api', '');
+    const token = request.headers?.authorization?.replace('Bearer ', '');
 
     return await this.permissionGuardService.hasPermission(path, token);
   }

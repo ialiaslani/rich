@@ -20,5 +20,6 @@
 17. - [ ] name the routes
 18. - [ ] seed
 19. - [ ] add ELASTIC
-20. - [ ] add linters
-21. 
+20. - [x] add linters
+21. - [ ] separate configuration files
+22. - [ ] 

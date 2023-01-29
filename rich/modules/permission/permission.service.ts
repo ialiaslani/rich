@@ -9,46 +9,45 @@ import { CommonService } from '../common/common.service';
 
 @Injectable()
 export class PermissionService extends CommonService {
+  constructor(
+    @InjectRepository(Permission) private readonly permissionRepository: Repository<Permission>,
+    private permissionUtils: PermissionUtils,
+  ) {
+    super(permissionRepository);
+  }
 
-        constructor (
-                @InjectRepository(Permission) private readonly permissionRepository: Repository<Permission>,
-                private permissionUtils: PermissionUtils
+  allRoutes(req) {
+    const router = req.app._router as Router;
+    const routes = router.stack
+      .map((layer) => {
+        if (
+          layer.route &&
+          !(
+            layer.route?.path.includes('docs') ||
+            layer.route?.path.includes('register') ||
+            layer.route?.path.includes('login')
+          )
         ) {
-                super(permissionRepository)
+          const path = layer.route?.path;
+          const pattern = this.permissionUtils.serializePermission(path);
+          const method = layer.route?.stack[0].method;
+          return { method, path, pattern };
         }
+      })
+      .filter((item) => item !== undefined);
+    return {
+      routes,
+    };
+  }
 
+  async generate({ permissions, role_id }: PermissionGenerateDto, req) {
+    const allRoutes = this.allRoutes(req).routes.map((r) => r.path);
+    const patterns = this.permissionUtils.generatePermission(allRoutes, permissions);
 
-        allRoutes(req) {
-                const router = req.app._router as Router;
-                const routes = router.stack
-                        .map(layer => {
-                                if (layer.route && !(
-                                        layer.route?.path.includes("docs") ||
-                                        layer.route?.path.includes("register") ||
-                                        layer.route?.path.includes("login")
-                                )) {
-                                        const path = layer.route?.path;
-                                        const pattern = this.permissionUtils.serializePermission(path)
-                                        const method = layer.route?.stack[0].method;
-                                        return { method, path, pattern }
-                                }
-                        })
-                        .filter(item => item !== undefined)
-                return {
-                        routes
-                }
-        }
+    for await (const pattern of patterns) {
+      await this.create({ pattern, name: 'no-name', roles: [{ id: role_id }] });
+    }
 
-
-        async generate({ permissions, role_id }: PermissionGenerateDto, req) {
-
-                const allRoutes = this.allRoutes(req).routes.map(r => r.path)
-                const patterns = this.permissionUtils.generatePermission(allRoutes, permissions)
-
-                for await (const pattern of patterns) {
-                        await this.create({ pattern, name: "no-name", roles: [{ id: role_id }] })
-                }
-
-                return patterns
-        }
+    return patterns;
+  }
 }

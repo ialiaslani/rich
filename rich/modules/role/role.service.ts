@@ -6,11 +6,7 @@ import { CommonService } from '../common/common.service';
 
 @Injectable()
 export class RoleService extends CommonService {
-
-        constructor (
-                @InjectRepository(Role) private readonly roleRepository: Repository<Role>
-        ) {
-                super(roleRepository)
-        }
-
+  constructor(@InjectRepository(Role) private readonly roleRepository: Repository<Role>) {
+    super(roleRepository);
+  }
 }
