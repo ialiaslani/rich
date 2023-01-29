@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { MulterModule } from '@nestjs/platform-express';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
@@ -14,6 +14,19 @@ import { PermissionGuardService } from './permission/permission.gurd.service';
 import { RequestLogService } from './request_log/request_log.service';
 import { AppLoggerMiddleware } from './request_log/request_log.middleware';
 import { CacheModule } from './cache/cache.module';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
+
+type TRichImports = {
+  type: string;
+  host: string;
+  port: string;
+  username: string;
+  password: string;
+  database: string;
+  autoLoadEntities: string;
+  synchronize: boolean;
+  elasticHost: string;
+};
 
 @Module({})
 export class RichModule implements NestModule {
@@ -22,8 +35,8 @@ export class RichModule implements NestModule {
   }
 }
 
-export const RichImports = (dbConfig: object) => [
-  TypeOrmModule.forRoot(dbConfig),
+export const RichImports = ({ elasticHost, ...dbConfig }: TRichImports) => [
+  TypeOrmModule.forRoot(dbConfig as object as TypeOrmModuleOptions),
   AuthModule,
   UserModule,
   PermissionModule,
@@ -34,6 +47,9 @@ export const RichImports = (dbConfig: object) => [
   CacheModule,
   MulterModule.register({
     dest: './upload',
+  }),
+  ElasticsearchModule.register({
+    node: elasticHost
   }),
 ];
 
