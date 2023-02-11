@@ -14,6 +14,7 @@ import { RichImports, RichModule, RichProviders } from '@rich';
       database: process.env.DB_NAME,
       autoLoadEntities: process.env.DB_AUTO_LOAD_ENTITIES,
       synchronize: true,
+      elasticHost: process.env.ELASTIC_HOST,
     }),
   ],
   providers: [...RichProviders],

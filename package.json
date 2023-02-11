@@ -22,9 +22,11 @@
     "rich": "ts-node ./rich/commander/commander.ts"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.6.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/elasticsearch": "^9.0.0",
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.1.4",
