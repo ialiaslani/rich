@@ -1,15 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-
 export class CommonSearchDto {
+  @ApiProperty()
+  page: number;
 
-        @ApiProperty()
-        page: number
+  @ApiProperty()
+  size: number;
 
-        @ApiProperty()
-        size: number
-
-        @ApiProperty({ required: false })
-        getExcel: boolean
-
+  @ApiProperty({ required: false })
+  getExcel: boolean;
 }

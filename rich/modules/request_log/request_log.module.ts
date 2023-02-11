@@ -6,11 +6,8 @@ import { RequestLog } from './models/request_log.entity';
 import { CommonModule } from '../common/common.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([RequestLog]),
-    CommonModule
-  ],
+  imports: [TypeOrmModule.forFeature([RequestLog]), CommonModule],
   controllers: [RequestLogController],
-  providers: [RequestLogService]
+  providers: [RequestLogService],
 })
-export class RequestLogModule { }
+export class RequestLogModule {}

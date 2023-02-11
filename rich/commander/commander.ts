@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { Command, CommandFactory, CommandRunner, Option, } from 'nest-commander';
-import * as fs from "fs"
+import { Command, CommandFactory, CommandRunner, Option } from 'nest-commander';
+import * as fs from 'fs';
 import { resolve } from 'path';
 
 interface CrudCommandOptions {
@@ -9,10 +9,7 @@ interface CrudCommandOptions {
 
 @Command({ name: 'crud', description: 'A parameter parse' })
 export class CrudCommand extends CommandRunner {
-  async run(
-    passedParam: string[],
-    options?: CrudCommandOptions,
-  ): Promise<void> {
+  async run(passedParam: string[], options?: CrudCommandOptions): Promise<void> {
     if (options?.permission) {
       this.runWithoutPermission(passedParam);
     } else {
@@ -25,51 +22,48 @@ export class CrudCommand extends CommandRunner {
     description: 'a crud without permission',
   })
   async runWithoutPermission(param: string[]): Promise<void> {
-    return this.runCrud(param)
+    return this.runCrud(param);
   }
-
 
   async runCrud(param: string[], noPermission?: boolean): Promise<void> {
-
-    const [name] = param
+    const [name] = param;
 
     if (!name || name.length <= 2) {
-      throw new Error("Please Provide A Name For Crud")
+      throw new Error('Please Provide A Name For Crud');
     }
 
-    const ModuleName = this.generateModuleName(name)
+    const ModuleName = this.generateModuleName(name);
 
-    const path = resolve(__dirname + "../../../src/" + ModuleName)
+    const path = resolve(__dirname + '../../../src/' + ModuleName);
 
     if (fs.existsSync(path)) {
-      throw new Error('Directory exists!')
+      throw new Error('Directory exists!');
     }
 
-    fs.mkdirSync(path)
-    fs.writeFile(`${path}/${ModuleName}.module.ts`, this.generateModule(ModuleName), () => { })
-    fs.writeFile(`${path}/${ModuleName}.service.ts`, this.generateService(ModuleName), () => { })
-    fs.writeFile(`${path}/${ModuleName}.controller.ts`, this.generateController(ModuleName, noPermission), () => { })
+    fs.mkdirSync(path);
+    fs.writeFile(`${path}/${ModuleName}.module.ts`, this.generateModule(ModuleName), () => {});
+    fs.writeFile(`${path}/${ModuleName}.service.ts`, this.generateService(ModuleName), () => {});
+    fs.writeFile(`${path}/${ModuleName}.controller.ts`, this.generateController(ModuleName, noPermission), () => {});
 
-    fs.mkdirSync(path + "/model")
-    fs.writeFile(`${path}/model/${ModuleName}.entity.ts`, this.generateEntity(ModuleName), () => { })
+    fs.mkdirSync(path + '/model');
+    fs.writeFile(`${path}/model/${ModuleName}.entity.ts`, this.generateEntity(ModuleName), () => {});
 
-    fs.mkdirSync(path + "/dto")
-    fs.writeFile(`${path}/dto/${ModuleName}.create.dto.ts`, this.generateCreateOrUpdateDto(ModuleName, "Create"), () => { })
-    fs.writeFile(`${path}/dto/${ModuleName}.delete.dto.ts`, this.generateParamsDto(ModuleName, "Delete"), () => { })
-    fs.writeFile(`${path}/dto/${ModuleName}.search.dto.ts`, this.generateSearchDto(ModuleName), () => { })
-    fs.writeFile(`${path}/dto/${ModuleName}.show.dto.ts`, this.generateParamsDto(ModuleName, "Show"), () => { })
-    fs.writeFile(`${path}/dto/${ModuleName}.update.dto.ts`, this.generateUpdateDto(ModuleName), () => { })
+    fs.mkdirSync(path + '/dto');
+    fs.writeFile(
+      `${path}/dto/${ModuleName}.create.dto.ts`,
+      this.generateCreateOrUpdateDto(ModuleName, 'Create'),
+      () => {},
+    );
+    fs.writeFile(`${path}/dto/${ModuleName}.delete.dto.ts`, this.generateParamsDto(ModuleName, 'Delete'), () => {});
+    fs.writeFile(`${path}/dto/${ModuleName}.search.dto.ts`, this.generateSearchDto(ModuleName), () => {});
+    fs.writeFile(`${path}/dto/${ModuleName}.show.dto.ts`, this.generateParamsDto(ModuleName, 'Show'), () => {});
+    fs.writeFile(`${path}/dto/${ModuleName}.update.dto.ts`, this.generateUpdateDto(ModuleName), () => {});
 
-    console.log(`Please Add ${this.generateModuleName(ModuleName, true)}Module In AppModule Imports`)
-
+    console.log(`Please Add ${this.generateModuleName(ModuleName, true)}Module In AppModule Imports`);
   }
 
-
-
-
   generateEntity(name: string) {
-
-    const EntityName = this.generateModuleName(name, true)
+    const EntityName = this.generateModuleName(name, true);
 
     return `
     import { CommonEntity } from "@rich";
@@ -77,56 +71,48 @@ export class CrudCommand extends CommandRunner {
     
     @Entity("${name}s")
     export class ${EntityName} extends CommonEntity {}
-    `
+    `;
   }
 
   generateSearchDto(name: string) {
-
-    const SearchDtoName = this.generateModuleName(name, true)
+    const SearchDtoName = this.generateModuleName(name, true);
 
     return `
     import { CommonSearchDto } from "@rich"
 
     export class ${SearchDtoName}SearchDto extends CommonSearchDto { }
-    `
+    `;
   }
 
-  generateParamsDto(name: string, type: "Show" | "Delete" | "UpdateParams") {
-
-    const ParamsDtoName = this.generateModuleName(name, true)
+  generateParamsDto(name: string, type: 'Show' | 'Delete' | 'UpdateParams') {
+    const ParamsDtoName = this.generateModuleName(name, true);
 
     return `
     import { CommonParamsDto } from '@rich';
 
     export class ${ParamsDtoName}${type}Dto extends CommonParamsDto {}
-    `
+    `;
   }
 
-  generateCreateOrUpdateDto(name: string, type: "Create" | "UpdatePayload") {
-
-    const dtoName = this.generateModuleName(name, true)
+  generateCreateOrUpdateDto(name: string, type: 'Create' | 'UpdatePayload') {
+    const dtoName = this.generateModuleName(name, true);
 
     return `
     export class ${dtoName}${type}Dto {}
-    `
+    `;
   }
 
   generateUpdateDto(name: string) {
-
     return `
-    ${this.generateParamsDto(name, "UpdateParams")}
+    ${this.generateParamsDto(name, 'UpdateParams')}
 
-    ${this.generateCreateOrUpdateDto(name, "UpdatePayload")}
+    ${this.generateCreateOrUpdateDto(name, 'UpdatePayload')}
     
-    `
-
+    `;
   }
 
-
-
   generateModule(name: string) {
-
-    const ModuleName = this.generateModuleName(name, true)
+    const ModuleName = this.generateModuleName(name, true);
 
     return `
     import { Module } from '@nestjs/common';
@@ -148,13 +134,11 @@ export class CrudCommand extends CommandRunner {
       ]
     })
     export class ${ModuleName}Module {}
-    `
-
+    `;
   }
 
   generateService(name: string) {
-
-    const ServiceName = this.generateModuleName(name, true)
+    const ServiceName = this.generateModuleName(name, true);
 
     return `
     import { Injectable } from '@nestjs/common';
@@ -173,14 +157,11 @@ export class CrudCommand extends CommandRunner {
             }
     
     }
-    `
+    `;
   }
 
-
-
   generateController(name: string, noPermission?: boolean) {
-
-    const ControllerName = this.generateModuleName(name, true)
+    const ControllerName = this.generateModuleName(name, true);
 
     return `
     import {
@@ -261,30 +242,25 @@ export class CrudCommand extends CommandRunner {
 
     }
 
-    `
+    `;
   }
 
-
   generateModuleName(name: string, startCap?: boolean) {
-    let ModuleName = name.replace(/^[\w,\s-]+\.[A-Za-z]{3}$/g, "").toLowerCase()
+    let ModuleName = name.replace(/^[\w,\s-]+\.[A-Za-z]{3}$/g, '').toLowerCase();
     if (startCap) {
       ModuleName = ModuleName.charAt(0).toUpperCase() + ModuleName.slice(1);
     }
-    return ModuleName
+    return ModuleName;
   }
-
-
 }
 
 @Module({
   providers: [CrudCommand],
 })
-export class AppModule { }
+export class AppModule {}
 
 async function bootstrap() {
   await CommandFactory.run(AppModule);
 }
 
 bootstrap();
-
-

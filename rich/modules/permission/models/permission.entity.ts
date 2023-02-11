@@ -1,13 +1,11 @@
-import { CommonEntity } from "../../common/models/common.entity";
-import { Column, Entity } from "typeorm";
+import { CommonEntity } from '../../common/models/common.entity';
+import { Column, Entity } from 'typeorm';
 
-@Entity("permissions")
+@Entity('permissions')
 export class Permission extends CommonEntity {
+  @Column()
+  name: string;
 
-        @Column()
-        name: string
-
-        @Column()
-        pattern: string
-
+  @Column()
+  pattern: string;
 }

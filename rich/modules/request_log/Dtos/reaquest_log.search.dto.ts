@@ -1,12 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-
 export class RequestLogSearchDto {
+  @ApiProperty()
+  page: number;
 
-        @ApiProperty()
-        page: number
-
-        @ApiProperty()
-        size: number
-
+  @ApiProperty()
+  size: number;
 }
